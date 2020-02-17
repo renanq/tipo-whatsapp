@@ -1,40 +1,54 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { ImageBackground, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { modificaEmail, modificaSenha} from '../actions/AutenticacaoActions';
+import { 
+    modificaEmail, 
+    modificaSenha,
+    autenticarUsuario
+} from '../actions/AutenticacaoActions';
 
-const formLogin = props => {
+class formLogin extends Component {
+
+    _autenticarUsuario() {
+        const { email, senha } = this.props;
+
+        this.props.autenticarUsuario({ email, senha });
+    }
     //console.log(props);
-    return (
-        <ImageBackground style={styles.principalBg} source={require('../imgs/bg.png')}>
-            <View style={styles.principal}>
-                <View style={styles.cabacalho}>
-                    <Text style={styles.cabecalhoTxt}>Tipo Um WhatsApp</Text>
-                </View>
-                <View style={styles.miolo}>
-                    <View style={styles.ajuste}>
-                        <TextInput value={props.email} style={styles.mioloInput} 
-                            placeholder='E-mail' placeholderTextColor={'#000000'}
-                            onChangeText={ texto => props.modificaEmail(texto)}
-                        />
-                        <TextInput  value={props.senha} style={styles.mioloInput} 
-                            placeholder='Senha' placeholderTextColor={'#000000'}
-                            secureTextEntry onChangeText={ texto => props.modificaSenha(texto)}
-                        />
-                        <TouchableOpacity onPress={() => Actions.formCadastro()}>
-                            <Text style={styles.mioloTxt}>Ainda não tem cadastro? Cadastre-se</Text>
+    render() {
+        return (
+            <ImageBackground style={styles.principalBg} source={require('../imgs/bg.png')}>
+                <View style={styles.principal}>
+                    <View style={styles.cabacalho}>
+                        <Text style={styles.cabecalhoTxt}>Tipo Um WhatsApp</Text>
+                    </View>
+                    <View style={styles.miolo}>
+                        <View style={styles.ajuste}>
+                            <TextInput value={this.props.email} style={styles.mioloInput} 
+                                placeholder='E-mail' placeholderTextColor={'#000000'}
+                                onChangeText={ texto => this.props.modificaEmail(texto)}
+                            />
+                            <TextInput  value={this.props.senha} style={styles.mioloInput} 
+                                placeholder='Senha' placeholderTextColor={'#000000'}
+                                secureTextEntry onChangeText={ texto => this.props.modificaSenha(texto)}
+                            />
+                            <Text style={styles.erroMsg}>{this.props.erroLogin}</Text>
+                            <TouchableOpacity onPress={() => Actions.formCadastro()}>
+                                <Text style={styles.mioloTxt}>Ainda não tem cadastro? Cadastre-se</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={styles.inferior}>
+                        <TouchableOpacity style={styles.inferiorButton} 
+                        onPress={() => this._autenticarUsuario()}>
+                            <Text style={styles.inferiorButtonTxt}>Acessar</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.inferior}>
-                    <TouchableOpacity style={styles.inferiorButton} onPress={() => false}>
-                        <Text style={styles.inferiorButtonTxt}>Acessar</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </ImageBackground>
-    );
+            </ImageBackground>
+        );
+    }
 }
 
 
@@ -81,6 +95,14 @@ const styles = StyleSheet.create({
         textDecorationStyle: "solid",
         textDecorationColor: "#FFF",
     },
+    erroMsg: {
+        fontSize: 16,
+        color: '#F78181',
+        marginTop: 10,
+        marginBottom: 10,
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
     inferior: {
         flex: 2,
     },
@@ -106,11 +128,16 @@ const mapStateToProps = state => {
     return (
         {
             email: state.AutenticacaoReducer.email,
-            senha: state.AutenticacaoReducer.senha
+            senha: state.AutenticacaoReducer.senha,
+            erroLogin: state.AutenticacaoReducer.erroLogin
         }
     );
 }
 
 /* primeiro parametro as variaveis de stado
 segundo parametro as actions creators */
-export default connect(mapStateToProps, { modificaEmail, modificaSenha })(formLogin);
+export default connect(mapStateToProps, { 
+    modificaEmail, 
+    modificaSenha, 
+    autenticarUsuario 
+    })(formLogin);
