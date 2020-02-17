@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { ImageBackground, View, TextInput, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { ImageBackground, 
+    View, 
+    TextInput, 
+    TouchableOpacity, 
+    StyleSheet, 
+    Text,
+    ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { 
     modificaEmail, 
@@ -19,6 +25,25 @@ class formCadastro extends Component {
 
         this.props.cadastraUsuario({ nome, email, senha });
 
+    }
+
+    renderBtnCadastrar(){
+
+        if(this.props.loading_cadastro) {
+            return(
+                <ActivityIndicator 
+                    size="large"
+                />
+            )
+        }
+        return(
+            <TouchableOpacity 
+                style={styles.inferiorButton} 
+                onPress={() => this._cadastraUsuario()}
+            >
+                <Text style={styles.inferiorButtonTxt}>Cadastrar</Text>
+            </TouchableOpacity>
+        )
     }
 
     render() {
@@ -46,12 +71,7 @@ class formCadastro extends Component {
                         </View>
                     </View>
                     <View style={styles.inferior} >
-                        <TouchableOpacity 
-                            style={styles.inferiorButton} 
-                            onPress={() => this._cadastraUsuario()}
-                        >
-                            <Text style={styles.inferiorButtonTxt}>Cadastrar</Text>
-                        </TouchableOpacity>
+                        {this.renderBtnCadastrar()}
                     </View>
                 </View>
             </ImageBackground>
@@ -126,7 +146,8 @@ const mapStateToProps = state => {
             nome: state.AutenticacaoReducer.nome,
             email: state.AutenticacaoReducer.email,
             senha: state.AutenticacaoReducer.senha,
-            erroCadastro: state.AutenticacaoReducer.erroCadastro
+            erroCadastro: state.AutenticacaoReducer.erroCadastro,
+            loading_cadastro: state.AutenticacaoReducer.loading_cadastro
         }
     );
 }

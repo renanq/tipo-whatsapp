@@ -16,7 +16,8 @@ export default props => (
                 title="Cadastre-se" backTitle=' ' hideNavBar={false}
             />
             <Scene key='boasVindas' component={BoasVindas} 
-                title="Tipo WhatsApp" backTitle=' ' hideNavBar={false}
+                title="Tipo WhatsApp" hideNavBar={false}
+                left={()=>null}
             />
             <Scene key='Principal' component={Principal} 
                 title="Tipo Um Whatsapp" hideNavBar={false} 

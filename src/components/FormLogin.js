@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { ImageBackground, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { ImageBackground, 
+    View, 
+    Text, 
+    TextInput, 
+    TouchableOpacity, 
+    StyleSheet,
+    ActivityIndicator} from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { 
@@ -9,12 +15,31 @@ import {
 } from '../actions/AutenticacaoActions';
 
 class formLogin extends Component {
-
+    
     _autenticarUsuario() {
         const { email, senha } = this.props;
 
         this.props.autenticarUsuario({ email, senha });
     }
+
+    renderBtnAcessar(){
+
+        if(this.props.loading_login) {
+            return(
+                <ActivityIndicator 
+                    size="large"
+                />
+            )
+        }
+        return(
+            <TouchableOpacity style={styles.inferiorButton} 
+                onPress={() => this._autenticarUsuario()}
+            >
+                <Text style={styles.inferiorButtonTxt}>Acessar</Text>
+            </TouchableOpacity>
+        )
+    }
+
     //console.log(props);
     render() {
         return (
@@ -40,10 +65,7 @@ class formLogin extends Component {
                         </View>
                     </View>
                     <View style={styles.inferior}>
-                        <TouchableOpacity style={styles.inferiorButton} 
-                        onPress={() => this._autenticarUsuario()}>
-                            <Text style={styles.inferiorButtonTxt}>Acessar</Text>
-                        </TouchableOpacity>
+                        {this.renderBtnAcessar()}
                     </View>
                 </View>
             </ImageBackground>
@@ -129,7 +151,8 @@ const mapStateToProps = state => {
         {
             email: state.AutenticacaoReducer.email,
             senha: state.AutenticacaoReducer.senha,
-            erroLogin: state.AutenticacaoReducer.erroLogin
+            erroLogin: state.AutenticacaoReducer.erroLogin,
+            loading_login: state.AutenticacaoReducer.loading_login
         }
     );
 }
