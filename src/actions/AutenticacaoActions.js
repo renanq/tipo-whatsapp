@@ -1,11 +1,18 @@
 import firebase from '../Firebase';
 import { Actions } from 'react-native-router-flux';
 import b64 from 'base-64';
+import { MODIFICA_EMAIL, 
+    MODIFICA_NOME,
+    MODIFICA_SENHA,
+    CADASTRO_USUARIO_SUCESSO,
+    CADASTRO_USUARIO_ERRO,
+    LOGIN_USUARIO_SUCESSO,
+    LOGIN_USUARIO_ERRO} from './types';
 
 export const modificaEmail = (texto) => {
     return (
         {
-            type: 'modifica_email',
+            type: MODIFICA_EMAIL,
             payload: texto
         }
     );
@@ -14,7 +21,7 @@ export const modificaEmail = (texto) => {
 export const modificaSenha = (texto) => {
     return (
         {
-            type: 'modifica_senha',
+            type: MODIFICA_SENHA,
             payload: texto
         }
     );
@@ -23,7 +30,7 @@ export const modificaSenha = (texto) => {
 export const modificaNome = (texto) => {
     return (
         {
-            type: 'modifica_nome',
+            type: MODIFICA_NOME,
             payload: texto
         }
     );
@@ -45,7 +52,7 @@ export const cadastraUsuario = ({ nome, email, senha }) => {
 
 const cadastroUsuarioSucesso = (dispatch) => {
     //em vez do return, o dispatch faz o retorno da action
-    dispatch({ type: 'cadastro_usuario_sucesso' });
+    dispatch({ type: CADASTRO_USUARIO_SUCESSO });
 
     //navega para a tela de sucesso (boas Vindas)
     Actions.boasVindas();
@@ -63,20 +70,20 @@ const cadastroUsuarioErro = (erro, dispatch) => {
         mensagemErro = 'Endereço de e-mail inválido';
     }
     //em vez do return, o dispatch faz o retorno da action
-    dispatch({ type: 'cadastro_usuario_erro', payload: mensagemErro });
+    dispatch({ type: CADASTRO_USUARIO_ERRO, payload: mensagemErro });
 }
 
 export const autenticarUsuario = ({ email, senha }) => {
     return dispatch => {
         firebase.auth().signInWithEmailAndPassword(email, senha)
-            .then(value => loginUsuarioSucesso(value, dispatch))
+            .then(value => loginUsuarioSucesso(dispatch))
             .catch(erro => loginUsuarioErro(erro, dispatch));
     }
 }
 
-const loginUsuarioSucesso = (value, dispatch) => {
+const loginUsuarioSucesso = (dispatch) => {
     //em vez do return, o dispatch faz o retorno da action
-    dispatch({ type: 'login_usuario_sucesso' });
+    dispatch({ type: LOGIN_USUARIO_SUCESSO });
 
     //navega para a tela de sucesso (boas Vindas)
     Actions.Principal();
@@ -94,5 +101,5 @@ const loginUsuarioErro = (erro, dispatch) => {
         mensagemErro = 'Utilize um endereço de e-mail válido.';
     }
     //em vez do return, o dispatch faz o retorno da action
-    dispatch({ type: 'login_usuario_erro', payload: mensagemErro });
+    dispatch({ type: LOGIN_USUARIO_ERRO, payload: mensagemErro });
 }

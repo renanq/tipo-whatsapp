@@ -9,10 +9,20 @@ import Principal from './components/Principal';
 export default props => (
     <Router>
         <Stack key="root" >
-            <Scene key='formLogin' component={FormLogin} title="Login" backTitle=' '/>
-            <Scene key='formCadastro' component={FormCadastro} title="Cadastre-se" backTitle=' '/>
-            <Scene key='boasVindas' component={BoasVindas} title="Tipo WhatsApp" backTitle=' '/>
-            <Scene key='Principal' component={Principal} title="Principal" backTitle=' '/>
+            <Scene key='formLogin' component={FormLogin} 
+                title="Login" backTitle=' ' hideNavBar={false}
+            />
+            <Scene key='formCadastro' component={FormCadastro} 
+                title="Cadastre-se" backTitle=' ' hideNavBar={false}
+            />
+            <Scene key='boasVindas' component={BoasVindas} 
+                title="Tipo WhatsApp" backTitle=' ' hideNavBar={false}
+            />
+            <Scene key='Principal' component={Principal} 
+                title="Tipo Um Whatsapp" hideNavBar={false} 
+                //esconde o botão de voltar
+                left={()=>null}
+            />
         </Stack>
     </Router>
 );
