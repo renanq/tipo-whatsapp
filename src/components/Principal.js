@@ -1,47 +1,46 @@
-import React from 'react';
-import { ImageBackground, View, StyleSheet, Text } from 'react-native';
+import * as React from 'react';
+import { View, StyleSheet, Dimensions, ImageBackground} from 'react-native';
+import { TabView, SceneMap } from 'react-native-tab-view';
+import TabBarMenu from './TabBarMenu';
+import Conversas from './Conversas';
+import Contatos from './Contatos';
 
-export default Principal = props => (
+const initialLayout = { width: Dimensions.get('window').width };
+
+export default function Principal() {
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: 'conversas', title: 'Conversas' },
+    { key: 'contatos', title: 'Contatos' },
+  ]);
+
+  const renderScene = SceneMap({
+    conversas: Conversas,
+    contatos: Contatos,
+  });
+
+  _handleChangeTab = index => this.setState({ index });
+
+  const renderTabBar = props => <TabBarMenu {...props} />
+
+  return (
     <ImageBackground style={styles.principalBg} source={require('../imgs/bg.png')}>
-        <View style={styles.principal}>
-            <Text style={styles.cabecalhoTxt}>Tipo Um WhatsApp Principal</Text>
-        </View>
+        <TabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={initialLayout}
+        renderTabBar={renderTabBar}
+        />
     </ImageBackground>
-);
+  );
+}
 
 const styles = StyleSheet.create({
     principalBg: {
         flex: 1,
     },
-    principal: {
-        flex: 1, 
-        padding: 10,
-    },
-    cabacalho: {
-        flex: 2, 
-        justifyContent: 'center', 
-        alignItems: 'center',
-    },
-    cabecalhoTxt: {
-        fontSize: 25,
-        backgroundColor: 'transparent',
-        color: '#FFFFFF',
-        fontWeight: 'bold',
-        marginTop: 10,
-       },
-    inferior: {
+    scene: {
         flex: 1,
     },
-    inferiorButton: {
-        backgroundColor: '#115E54',
-        height: 45,
-        justifyContent: 'center',
-        borderColor: '#FFFFFF',
-        borderWidth: 1,
-    },
-    inferiorButtonTxt: {
-        color: '#FFFFFF',
-        fontSize: 20, 
-        textAlign: 'center',
-    },
-})
+});

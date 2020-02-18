@@ -47,7 +47,7 @@ export const cadastraUsuario = ({ nome, email, senha }) => {
         firebase.auth().createUserWithEmailAndPassword(email, senha)
             .then(user => {
                 let emailB64 = b64.encode(email);
-                firebase.database().ref(`/contatos/${emailB64}`)
+                firebase.database().ref(`/usuarios/${emailB64}`)
                     .push({ nome })
                     .then(value => cadastroUsuarioSucesso(dispatch))
             })
@@ -94,7 +94,7 @@ const loginUsuarioSucesso = (dispatch) => {
     dispatch({ type: LOGIN_USUARIO_SUCESSO });
 
     //navega para a tela de sucesso (boas Vindas)
-    Actions.Principal();
+    Actions.principal();
 }
 
 const loginUsuarioErro = (erro, dispatch) => {
