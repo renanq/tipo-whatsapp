@@ -1,34 +1,55 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { View, TextInput, Text, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { modificaAdicionaContatoEmail,
 adicionaContato } from '../actions/AppActions'
 
-const AdicionarContato = props => (
-    <ImageBackground style={styles.principalBg} source={require('../imgs/bg.png')}>
-        <View style={styles.principal}>
-            <View style={styles.cabacalho}>
-                <Text style={styles.cabecalhoTxt}>Adicione um novo contato:</Text>
-                <View style={styles.ajuste}>
-                    <TextInput placeholder="E-mail" 
-                        placeholderTextColor={'#000000'} style={styles.cabecalhoInput} 
-                        onChangeText={(texto) => props.modificaAdicionaContatoEmail(texto)}
-                        value={props.adiciona_contato_email}
-                    />
+class AdicionarContato extends Component {
+    
+    renderAdicionaContato() {
+        if(!this.props.sucessoAdicionaContato) {
+            return (
+                    <View style={styles.principal}>
+                        <View style={styles.cabacalho}>
+                            <Text style={styles.cabecalhoTxt}>Adicione um novo contato:</Text>
+                            <View style={styles.ajuste}>
+                                <TextInput placeholder="E-mail" 
+                                    placeholderTextColor={'#000000'} style={styles.cabecalhoInput} 
+                                    onChangeText={(texto) => this.props.modificaAdicionaContatoEmail(texto)}
+                                    value={this.props.adiciona_contato_email}
+                                />
+                            </View>
+                            <Text style={styles.erroMsg}>{this.props.erroAdicionaContato}</Text>
+                        </View>
+                        <View style={styles.inferior} >
+                            <TouchableOpacity 
+                                    style={styles.inferiorButton} 
+                                    onPress={() => this.props.adicionaContato(this.props.adiciona_contato_email) }                    
+                            >
+                                <Text style={styles.inferiorButtonTxt}>Adicionar</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+            )
+        }else {
+            return (
+                <View style={styles.principal}>
+                    <View style={styles.cabacalho}>
+                        <Text style={styles.cabecalhoTxt}>Contato adicionado com sucesso!</Text>
+                    </View>
                 </View>
-                <Text style={styles.erroMsg}>{props.erroAdicionaContato}</Text>
-            </View>
-            <View style={styles.inferior} >
-                <TouchableOpacity 
-                        style={styles.inferiorButton} 
-                        onPress={() => props.adicionaContato(props.adiciona_contato_email) }                    
-                >
-                    <Text style={styles.inferiorButtonTxt}>Adicionar</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    </ImageBackground>
-);
+            )
+        }
+    }
+    
+    render() {
+        return (
+            <ImageBackground style={styles.principalBg} source={require('../imgs/bg.png')}>
+                {this.renderAdicionaContato()}
+            </ImageBackground>
+        );
+    }
+}
 
 const styles = StyleSheet.create({
     principalBg: {
@@ -89,7 +110,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => (
     {
         adiciona_contato_email: state.AppReducer.adiciona_contato_email,
-        erroAdicionaContato: state.AppReducer.erroAdicionaContato
+        erroAdicionaContato: state.AppReducer.erroAdicionaContato,
+        sucessoAdicionaContato: state.AppReducer.sucessoAdicionaContato,
     }
 )
 

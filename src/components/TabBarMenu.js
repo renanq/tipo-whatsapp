@@ -2,8 +2,10 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, StatusBar, TouchableOpacity } from 'react-native';
 import { TabBar } from 'react-native-tab-view';
 import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { habilitaAdicionarContato } from '../actions/AppActions';
 
-export default props => (
+const TabBarMenu = props => (
     <View >
         <StatusBar backgroundColor="#114D44"/>
         
@@ -11,7 +13,7 @@ export default props => (
                 <Text style={styles.cabecalhoTxt}>Tipo Um WhatsApp</Text>
                 <View style={styles.btns}>
                     <View>
-                        <TouchableOpacity onPress={() => Actions.adicionarContato()}>
+                        <TouchableOpacity onPress={() => { Actions.adicionarContato(); props.habilitaAdicionarContato() }}>
                             <Image source={require('../imgs/btn-add-contato.png')} />
                         </TouchableOpacity>
                     </View>
@@ -57,3 +59,5 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
     }
 });
+
+export default connect(null, { habilitaAdicionarContato })(TabBarMenu);

@@ -3,7 +3,8 @@ import b64 from 'base-64';
 import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
 import { MODIFICA_ADICIONA_CONTATO_EMAIL,
-    ADICIONA_CONTATO_ERRO } from './types';
+    ADICIONA_CONTATO_ERRO,
+    ADICIONA_CONTATO_SUCESSO } from './types';
 
 //do campo email da tela Adicionar Contato
 export const modificaAdicionaContatoEmail = (texto) => {
@@ -31,8 +32,8 @@ export const adicionaContato = email => {
                 let emailUsuarioB64 = b64.encode(currentUser.email);
                 firebase.database().ref(`/usuario_contatos/${emailUsuarioB64}`)
                     .push({ email: email, nome: dadosUsuario.nome })
-                    .then(() => console.log('sucesso'))
-                    .catch(erro => adicionaContatoErro(erro, dispatch));
+                    .then(() => adicionaContatoSucesso(dispatch))
+                    .catch(erro => adicionaContatoErro(erro.message, dispatch));
             }else {
                 dispatch({ 
                     type: ADICIONA_CONTATO_ERRO,
@@ -46,8 +47,25 @@ export const adicionaContato = email => {
 const adicionaContatoErro = (erro, dispatch) => {
     dispatch (
         {
-            ADICIONA_CONTATO_ERRO,
+            type: ADICIONA_CONTATO_ERRO,
             payload: erro
         }
     )
 }
+
+const adicionaContatoSucesso = dispatch => {
+    dispatch (
+        {
+            type: ADICIONA_CONTATO_SUCESSO,
+            payload: true
+        }
+    )
+}
+
+//altera a variavel para exibir o formulario de adição de contato
+export const habilitaAdicionarContato = () => (
+    {
+        type: ADICIONA_CONTATO_SUCESSO,
+        payload: false
+    }
+)
