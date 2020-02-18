@@ -5,7 +5,8 @@ import { Actions } from 'react-native-router-flux';
 import { MODIFICA_ADICIONA_CONTATO_EMAIL,
     ADICIONA_CONTATO_ERRO,
     ADICIONA_CONTATO_SUCESSO,
-    ADICIONA_CONTATO_EM_ANDAMENTO } from './types';
+    ADICIONA_CONTATO_EM_ANDAMENTO,
+    LISTA_CONTATO_USUARIO } from './types';
 
 //do campo email da tela Adicionar Contato
 export const modificaAdicionaContatoEmail = (texto) => {
@@ -72,3 +73,17 @@ export const habilitaAdicionarContato = () => (
         payload: false
     }
 )
+
+export const contatosUsuarioFetch = () => {
+    const { currentUser } = firebase.auth();
+
+    return (dispatch) => {
+        let emailUsuarioB64 = b64.encode(currentUser.email);
+
+        firebase.database().ref(`/usuario_contatos/${emailUsuarioB64}`)
+            //cria um listenner    
+            .on("value", snapshot => {
+                dispatch({ type: LISTA_CONTATO_USUARIO, payload: snapshot.val() })
+            })
+    }
+}
