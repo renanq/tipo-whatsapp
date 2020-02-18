@@ -3,7 +3,8 @@ import { View, Text, SafeAreaView, FlatList, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { contatosUsuarioFetch } from '../actions/AppActions';
-import ListaContatosReducer from '../reducers/ListaContatosReducer';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Actions } from 'react-native-router-flux';
 
 class Contatos extends Component {
 
@@ -14,10 +15,20 @@ class Contatos extends Component {
 
     Item(nome, email) {
         return (
-          <View style={styles.item}>
-            <Text style={styles.itemNome}>{nome}</Text>
-            <Text style={styles.itemEmail}>{email}</Text>
-          </View>
+            <TouchableOpacity
+                onPress={ () => Actions.conversa(
+                    { 
+                        title: nome,
+                        contatoNome: nome, 
+                        contatoEmail: email 
+                    }
+                ) }
+            >
+                <View style={styles.item}>
+                    <Text style={styles.itemNome}>{nome}</Text>
+                    <Text style={styles.itemEmail}>{email}</Text>
+                </View>
+            </TouchableOpacity>
         );
       }
     

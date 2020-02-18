@@ -6,6 +6,7 @@ import FormCadastro from './components/FormCadastro';
 import BoasVindas from './components/BoasVindas';
 import Principal from './components/Principal';
 import AdicionarContato from './components/AdicionarContato';
+import Conversa from './components/Conversa';
 import { StyleSheet } from 'react-native';
 
 export default props => (
@@ -28,6 +29,13 @@ export default props => (
             />
             <Scene key='adicionarContato' component={AdicionarContato} 
                 title="Adicionar Contato" hideNavBar={false} 
+                titleStyle={styles.statusBarTxt}
+                navigationBarStyle={styles.statusBar}
+                backTitle=' '
+                headerTintColor="#FFF"
+            />
+            <Scene key='conversa' component={Conversa} 
+                title="Conversa" hideNavBar={false} 
                 titleStyle={styles.statusBarTxt}
                 navigationBarStyle={styles.statusBar}
                 backTitle=' '

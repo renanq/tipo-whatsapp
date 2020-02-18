@@ -6,7 +6,8 @@ import { MODIFICA_ADICIONA_CONTATO_EMAIL,
     ADICIONA_CONTATO_ERRO,
     ADICIONA_CONTATO_SUCESSO,
     ADICIONA_CONTATO_EM_ANDAMENTO,
-    LISTA_CONTATO_USUARIO } from './types';
+    LISTA_CONTATO_USUARIO,
+    MODIFICA_MENSAGEM } from './types';
 
 //do campo email da tela Adicionar Contato
 export const modificaAdicionaContatoEmail = (texto) => {
@@ -84,6 +85,54 @@ export const contatosUsuarioFetch = () => {
             //cria um listenner    
             .on("value", snapshot => {
                 dispatch({ type: LISTA_CONTATO_USUARIO, payload: snapshot.val() })
+            })
+    }
+}
+
+export const modificaMensagem = texto => {
+    return({
+        type: MODIFICA_MENSAGEM,
+        payload: texto
+    })
+}
+
+export const enviaMensagem = (mensagem, contatoNome, contatoEmail) => {
+    //dados do usuario logado
+    const { currentUser } = firebase.auth();
+    const usuarioEmail = currentUser.email;
+    return (dispatch) => {
+        //convertendo pra vase 64
+        const usuarioEmailB64 = b64.encode(usuarioEmail);
+        const contatoEmailB64 = b64.encode(contatoEmail);
+        //cadastra a mensagem enviada para o usuario que enviou
+        firebase.database().ref(`/mensagens/${usuarioEmailB64}/${contatoEmailB64}`)
+            //tipo 'e' de envio
+            .push({ mensagem, tipo: 'e' })
+            .then(() => {
+                //cadastra a mensagem recebida para o contato
+                firebase.database().ref(`/mensagens/${contatoEmailB64}/${usuarioEmailB64}`)
+                    //tipo 'r' de recebimento    
+                    .push({ mensagem, tipo: 'r' })
+                    .then(() => dispatch({ type: 'xyz' }))
+            })
+            .then(() => {
+                //cadastra os cabeçalhos das conversas para a tela de conversas do usuario logado
+                firebase.database().ref(`/usuario_conversas/${usuarioEmailB64}/${contatoEmailB64}`)
+                    //set sobrescreve caso exista  (não ter duplicatas)  
+                    .set({ nome: contatoNome, email: contatoEmail })
+            })
+            .then(() => {
+                //recuperando nome do usuario logado
+                firebase.database().ref(`/usuarios/${usuarioEmailB64}`)
+                    .once("value")
+                    .then(snapshot => {
+                        //converte em array
+                        const dadosUsuario = _.first(_.values(snapshot.val()))
+                        //cadastra os cabeçalhos das conversas para a tela de conversas do contato
+                        firebase.database().ref(`/usuario_conversas/${contatoEmailB64}/${usuarioEmailB64}`)
+                            //set sobrescreve caso exista  (não ter duplicatas)  
+                            .set({ nome: dadosUsuario.nome, email: usuarioEmail })
+                    })
             })
     }
 }
