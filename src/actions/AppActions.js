@@ -40,7 +40,7 @@ export const adicionaContato = email => {
             }else {
                 dispatch({ 
                     type: ADICIONA_CONTATO_ERRO,
-                    payload: 'Usuário não encontrado com o email cadastrado.'
+                    payload: 'Usuário não encontrado com o email informado.'
                 });
             }
         })
