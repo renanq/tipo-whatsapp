@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { View, TextInput, Text, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, 
+    TextInput, 
+    Text, 
+    ImageBackground, 
+    StyleSheet, 
+    TouchableOpacity,
+    ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { modificaAdicionaContatoEmail,
 adicionaContato } from '../actions/AppActions'
@@ -22,12 +28,19 @@ class AdicionarContato extends Component {
                             <Text style={styles.erroMsg}>{this.props.erroAdicionaContato}</Text>
                         </View>
                         <View style={styles.inferior} >
-                            <TouchableOpacity 
-                                    style={styles.inferiorButton} 
-                                    onPress={() => this.props.adicionaContato(this.props.adiciona_contato_email) }                    
-                            >
-                                <Text style={styles.inferiorButtonTxt}>Adicionar</Text>
-                            </TouchableOpacity>
+                            {!this.props.loading_adiciona_contato && 
+                                <TouchableOpacity 
+                                        style={styles.inferiorButton} 
+                                        onPress={() => this.props.adicionaContato(this.props.adiciona_contato_email) }                    
+                                >
+                                    <Text style={styles.inferiorButtonTxt}>Adicionar</Text>
+                                </TouchableOpacity>
+                            }
+                            {this.props.loading_adiciona_contato &&
+                                <ActivityIndicator 
+                                size="large"
+                                />
+                            }
                         </View>
                     </View>
             )
@@ -112,6 +125,7 @@ const mapStateToProps = state => (
         adiciona_contato_email: state.AppReducer.adiciona_contato_email,
         erroAdicionaContato: state.AppReducer.erroAdicionaContato,
         sucessoAdicionaContato: state.AppReducer.sucessoAdicionaContato,
+        loading_adiciona_contato: state.AppReducer.loading_adiciona_contato
     }
 )
 

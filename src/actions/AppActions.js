@@ -4,7 +4,8 @@ import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
 import { MODIFICA_ADICIONA_CONTATO_EMAIL,
     ADICIONA_CONTATO_ERRO,
-    ADICIONA_CONTATO_SUCESSO } from './types';
+    ADICIONA_CONTATO_SUCESSO,
+    ADICIONA_CONTATO_EM_ANDAMENTO } from './types';
 
 //do campo email da tela Adicionar Contato
 export const modificaAdicionaContatoEmail = (texto) => {
@@ -19,6 +20,8 @@ export const modificaAdicionaContatoEmail = (texto) => {
 export const adicionaContato = email => {
     return dispatch => {
     
+    dispatch({ type: ADICIONA_CONTATO_EM_ANDAMENTO });
+
     let emailB64 = b64.encode(email);
 
     firebase.database().ref(`/usuarios/${emailB64}`)
