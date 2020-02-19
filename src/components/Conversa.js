@@ -8,9 +8,14 @@ import { View,
     Image,
     KeyboardAvoidingView} from 'react-native';
     import { connect } from 'react-redux';
-    import { modificaMensagem, enviaMensagem } from '../actions/AppActions';
+    import _ from 'lodash';
+    import { modificaMensagem, enviaMensagem, conversaUsuarioFetch } from '../actions/AppActions';
 
 class Conversa extends Component {
+
+    UNSAFE_componentWillMount() {
+        this.props.conversaUsuarioFetch(this.props.contatoEmail);
+    }
 
     _enviaMensagem() {
         const { mensagem, contatoNome, contatoEmail } = this.props;
@@ -85,9 +90,17 @@ const styles = StyleSheet.create({
 });
 
 mapStateToProps = state => {
+    const conversa = _.map(state.ListaConversaReducer, (val, uid) => {
+        return { ...val, uid }
+    });
+    console.log(conversa);
     return ({
+        conversa,
         mensagem: state.AppReducer.mensagem
     })
 }
 
-export default connect(mapStateToProps, { modificaMensagem, enviaMensagem })(Conversa);
+export default connect(mapStateToProps, { 
+    modificaMensagem, 
+    enviaMensagem,
+    conversaUsuarioFetch })(Conversa);

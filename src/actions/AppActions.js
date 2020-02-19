@@ -7,7 +7,8 @@ import { MODIFICA_ADICIONA_CONTATO_EMAIL,
     ADICIONA_CONTATO_SUCESSO,
     ADICIONA_CONTATO_EM_ANDAMENTO,
     LISTA_CONTATO_USUARIO,
-    MODIFICA_MENSAGEM } from './types';
+    MODIFICA_MENSAGEM,
+    LISTA_CONVERSA_USUARIO } from './types';
 
 //do campo email da tela Adicionar Contato
 export const modificaAdicionaContatoEmail = (texto) => {
@@ -133,6 +134,22 @@ export const enviaMensagem = (mensagem, contatoNome, contatoEmail) => {
                             //set sobrescreve caso exista  (não ter duplicatas)  
                             .set({ nome: dadosUsuario.nome, email: usuarioEmail })
                     })
+            })
+    }
+}
+
+export const conversaUsuarioFetch = contatoEmail => {
+
+    const { currentUser } = firebase.auth();
+    //emails na base 64
+    let usuarioEmailB64 = b64.encode(currentUser.email);
+    let contatoEmailB64 = b64.encode(contatoEmail);
+
+    return dispatch => {
+        firebase.database().ref(`/mensagens/${usuarioEmailB64}/${contatoEmailB64}`)
+            //cria listenner
+            .on("value", snapshot => {
+                dispatch({ type: LISTA_CONVERSA_USUARIO, payload: snapshot.val() });
             })
     }
 }
