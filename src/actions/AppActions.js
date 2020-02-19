@@ -8,7 +8,8 @@ import { MODIFICA_ADICIONA_CONTATO_EMAIL,
     ADICIONA_CONTATO_EM_ANDAMENTO,
     LISTA_CONTATO_USUARIO,
     MODIFICA_MENSAGEM,
-    LISTA_CONVERSA_USUARIO } from './types';
+    LISTA_CONVERSA_USUARIO,
+    ENVIA_MENSAGEM_SUCESSO } from './types';
 
 //do campo email da tela Adicionar Contato
 export const modificaAdicionaContatoEmail = (texto) => {
@@ -114,7 +115,7 @@ export const enviaMensagem = (mensagem, contatoNome, contatoEmail) => {
                 firebase.database().ref(`/mensagens/${contatoEmailB64}/${usuarioEmailB64}`)
                     //tipo 'r' de recebimento    
                     .push({ mensagem, tipo: 'r' })
-                    .then(() => dispatch({ type: 'xyz' }))
+                    .then(() => dispatch({ type: ENVIA_MENSAGEM_SUCESSO }))
             })
             .then(() => {
                 //cadastra os cabeçalhos das conversas para a tela de conversas do usuario logado

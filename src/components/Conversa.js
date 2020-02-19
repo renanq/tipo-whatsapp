@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
-import { View, 
+import { 
+    View, 
     Text, 
     StyleSheet, 
     ImageBackground, 
     TextInput, 
     TouchableOpacity,
     Image,
-    KeyboardAvoidingView} from 'react-native';
-    import { connect } from 'react-redux';
-    import _ from 'lodash';
-    import { modificaMensagem, enviaMensagem, conversaUsuarioFetch } from '../actions/AppActions';
+    KeyboardAvoidingView,
+    SafeAreaView, 
+    FlatList} from 'react-native';
+import { connect } from 'react-redux';
+import _ from 'lodash';
+import { 
+    modificaMensagem, 
+    enviaMensagem, 
+    conversaUsuarioFetch } from '../actions/AppActions';
 
 class Conversa extends Component {
 
@@ -22,12 +28,33 @@ class Conversa extends Component {
         this.props.enviaMensagem(mensagem, contatoNome, contatoEmail);
     }
 
+    Item(tipo, mensagem) {
+        if(tipo === 'e') {
+            return (
+                <View style={styles.msgE}>
+                    <Text style={styles.itemE}>{mensagem}</Text>
+                </View>
+            )
+        }
+        return (
+            <View style={styles.msgR}>
+                <Text style={styles.itemR}>{mensagem}</Text>
+            </View>
+        )
+      }
+
     render() {
         return (
             
             <ImageBackground style={styles.principalBg} source={require('../imgs/bg.png')}>
                 <View style={styles.conversa}>
-                    <Text>Conversa</Text>
+                    <SafeAreaView>
+                        <FlatList
+                            data={this.props.conversa}
+                            renderItem={({item}) => this.Item(item.tipo, item.mensagem)}
+                            keyExtractor={ item => item.uid }
+                        />
+                    </SafeAreaView>
                 </View>
 
                 <KeyboardAvoidingView contentContainerStyle={styles.box} 
@@ -59,11 +86,7 @@ const styles = StyleSheet.create({
     principalBg: {
         flex: 1,
     },
-    conversa: {
-        flex: 1,
-        padding: 10,
-        paddingBottom: 20,
-    },
+    
     box: {
         position: 'absolute',
         bottom: 0,
@@ -86,7 +109,47 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         borderRadius: 5,
         paddingLeft: 10,
-    }
+    },
+    conversa: {
+        flex: 1,
+        paddingBottom: 20,
+        paddingHorizontal: 5,
+        paddingTop: 5,
+    },
+    msgE: {
+        paddingBottom: 5,
+        alignItems: 'flex-end', 
+        marginBottom: 5, 
+        marginLeft: 40,
+    },
+    msgR: {
+        paddingBottom: 5,
+        alignItems: 'flex-start', 
+        marginBottom: 5, 
+        marginRight: 40,
+    },
+    itemE: {
+        padding: 10,
+        backgroundColor: 'rgba(105, 246, 105, 0.7)',
+        borderWidth: 1,
+        borderColor: '#114D44',
+        fontSize: 16,
+        color: '#000',
+        fontWeight: 'bold',
+    },
+    itemR: {
+        padding: 10,
+        backgroundColor: 'rgba(246, 246, 105, 0.7)',
+        borderWidth: 1,
+        borderColor: '#114D44',
+        fontSize: 16,
+        color: '#000',
+        fontWeight: 'bold',
+    },
+    itemMsg: {
+        fontSize: 16,
+        color: '#000',
+    },
 });
 
 mapStateToProps = state => {
