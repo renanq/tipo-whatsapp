@@ -10,7 +10,7 @@ class Contatos extends Component {
 
     UNSAFE_componentWillMount() {
         this.props.contatosUsuarioFetch();
-        console.log( this.props.contatos );
+        //console.log( this.props.contatos );
     }
 
     Item(nome, email) {

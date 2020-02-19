@@ -58,7 +58,11 @@ class Conversa extends Component {
                 </View>
 
                 <KeyboardAvoidingView contentContainerStyle={styles.box} 
-                behavior="position" keyboardVerticalOffset="85">
+                    keyboardVerticalOffset="85"
+                    behavior={Platform.select({
+                        ios: 'position',
+                        android: null,
+                })}>
                     
                         <View style={styles.ajuste}>
                             <TextInput placeholder="Mensagem" 

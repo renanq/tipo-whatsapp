@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ImageBackground, 
     View, 
     Text, 
+    Image,
     TextInput, 
     TouchableOpacity, 
     StyleSheet,
@@ -46,6 +47,7 @@ class formLogin extends Component {
             <ImageBackground style={styles.principalBg} source={require('../imgs/bg.png')}>
                 <View style={styles.principal}>
                     <View style={styles.cabacalho}>
+                        <Image source={require('../imgs/logo.png')} />
                         <Text style={styles.cabecalhoTxt}>Tipo Um WhatsApp</Text>
                     </View>
                     <View style={styles.miolo}>

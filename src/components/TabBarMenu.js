@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, StatusBar, TouchableOpacity } from 'reac
 import { TabBar } from 'react-native-tab-view';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import firebase from '../Firebase';
 import { habilitaAdicionarContato } from '../actions/AppActions';
 
 const TabBarMenu = props => (
@@ -18,7 +19,9 @@ const TabBarMenu = props => (
                         </TouchableOpacity>
                     </View>
                     <View style={styles.sair}>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                         onPress={() => firebase.auth().signOut().then(() => Actions.formLogin())}
+                        >
                             <Image source={require('../imgs/btn-sair.png')} />
                         </TouchableOpacity>
                     </View>
