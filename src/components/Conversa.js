@@ -58,6 +58,7 @@ class Conversa extends Component {
                 </View>
 
                 <KeyboardAvoidingView contentContainerStyle={styles.box} 
+                    style={styles.box}
                     keyboardVerticalOffset="85"
                     behavior={Platform.select({
                         ios: 'position',
@@ -103,6 +104,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         borderTopColor: '#FFF',
         borderTopWidth: 1,
+        width: '103%',
     },
     ajuste: {
         width: '85%',
